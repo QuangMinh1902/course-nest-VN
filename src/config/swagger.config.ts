@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as basicAuth from 'express-basic-auth';
 
 export const swaggerConfig = function (app: INestApplication) {
   const config = new DocumentBuilder()
@@ -8,7 +9,27 @@ export const swaggerConfig = function (app: INestApplication) {
     .setVersion('1.0')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const username = process.env.HTTP_USERNAME;
+  const password = process.env.HTTP_PASSWORD;
 
-  SwaggerModule.setup('api', app, document);
+  console.log({ username, password });
+
+  if (!username || !password) {
+    throw new Error(
+      'HTTP_BASIC_USERNAME and HTTP_BASIC_PASSWORD environment variables are required',
+    );
+  }
+
+  app.use(
+    '/docs',
+    basicAuth({
+      challenge: true,
+      users: {
+        [username]: password,
+      },
+    }),
+  );
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 };
