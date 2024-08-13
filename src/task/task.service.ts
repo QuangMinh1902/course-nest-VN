@@ -11,6 +11,10 @@ import { Task, TaskStatus } from './task.model';
 export class TaskService {
   private tasks: Task[] = [];
 
+  testModule(): string {
+    return 'test module';
+  }
+
   getAllTasks() {
     return this.tasks;
   }

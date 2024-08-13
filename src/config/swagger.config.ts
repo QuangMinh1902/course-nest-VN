@@ -16,7 +16,7 @@ export const swaggerConfig = function (app: INestApplication) {
 
   if (!username || !password) {
     throw new Error(
-      'HTTP_BASIC_USERNAME and HTTP_BASIC_PASSWORD environment variables are required',
+      'HTTP_USERNAME and HTTP_PASSWORD environment variables are required',
     );
   }
 
