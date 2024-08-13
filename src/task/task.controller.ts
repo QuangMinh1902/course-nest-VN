@@ -23,11 +23,15 @@ import {
   UpdateTaskDto,
 } from './dtos/create-task.dto';
 import { TaskService } from './task.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('tasks')
 @ApiTags('Tasks')
 export class TaskController {
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private configService: ConfigService,
+  ) {}
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   @Get('')
@@ -37,6 +41,11 @@ export class TaskController {
   })
   getAllTasks(): DetailTaskDto[] {
     return this.taskService.getAllTasks();
+  }
+
+  @Get('port')
+  getPort() {
+    return this.configService.get('HTTP_PORT');
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
