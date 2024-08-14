@@ -1,34 +1,28 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as basicAuth from 'express-basic-auth';
+import { SwaggerConfig } from './env.config';
+import { ConfigService } from '@nestjs/config';
 
 export const swaggerConfig = function (app: INestApplication) {
-  const config = new DocumentBuilder()
-    .setTitle('Todos API')
-    .setDescription('NestJs API Documentation')
-    .setVersion('1.0')
-    .build();
+  const swaggerConfig = app.get(ConfigService).get<SwaggerConfig>('swagger');
 
-  const username = process.env.HTTP_USERNAME;
-  const password = process.env.HTTP_PASSWORD;
-
-  console.log({ username, password });
-
-  if (!username || !password) {
-    throw new Error(
-      'HTTP_USERNAME and HTTP_PASSWORD environment variables are required',
+  if (process.env.NODE_ENV !== 'dev') {
+    app.use(
+      [swaggerConfig.pathDoc, `${swaggerConfig.pathDoc}-json`],
+      basicAuth({
+        challenge: true,
+        users: {
+          admin: swaggerConfig.passsword,
+        },
+      }),
     );
   }
 
-  app.use(
-    '/docs',
-    basicAuth({
-      challenge: true,
-      users: {
-        [username]: password,
-      },
-    }),
-  );
+  const config = new DocumentBuilder()
+    .setTitle(swaggerConfig.title)
+    .setDescription(swaggerConfig.desc)
+    .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

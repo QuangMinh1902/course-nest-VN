@@ -4,6 +4,7 @@ import { DemoModule } from './demo/demo.module';
 import { ConfigModule } from '@nestjs/config';
 // import configurationConfig from './config/configuration.config';
 import { DatabaseModule } from './database/database.module';
+import envConfig from './config/env.config';
 
 @Module({
   imports: [
@@ -11,8 +12,7 @@ import { DatabaseModule } from './database/database.module';
     DemoModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      // envFilePath: './config/configuration.config.ts',
-      // load: [configurationConfig],
+      load: [envConfig],
     }),
     DatabaseModule,
   ],
