@@ -1,9 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// console.log(__dirname + '../**/*.entity{.ts,.js}');
-
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -16,7 +15,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        autoLoadEntities: true, // Cette ligne remplace la ligne 'entities'
         synchronize: true,
       }),
     }),
