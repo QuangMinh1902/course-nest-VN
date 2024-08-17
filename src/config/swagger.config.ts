@@ -1,10 +1,10 @@
 import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as basicAuth from 'express-basic-auth';
 import { SwaggerConfig } from './env.config';
-import { ConfigService } from '@nestjs/config';
 
-export const swaggerConfig = function (app: INestApplication) {
+export const configSwagger = (app: INestApplication) => {
   const swaggerConfig = app.get(ConfigService).get<SwaggerConfig>('swagger');
 
   if (process.env.NODE_ENV !== 'dev') {
@@ -13,7 +13,7 @@ export const swaggerConfig = function (app: INestApplication) {
       basicAuth({
         challenge: true,
         users: {
-          admin: swaggerConfig.passsword,
+          [swaggerConfig.username]: swaggerConfig.password,
         },
       }),
     );
@@ -25,5 +25,5 @@ export const swaggerConfig = function (app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup(swaggerConfig.pathDoc, app, document);
 };

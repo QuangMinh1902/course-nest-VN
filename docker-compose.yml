@@ -1,43 +1,35 @@
 services:
   postgres:
-    container_name: postgres
     image: postgres:latest
-    ports:
-      - '5432:5432'
+    networks:
+      - postgres
     env_file:
       - .env
-    networks:
-      - backend_network
-
+ 
   pgadmin:
-    links:
-      - postgres:postgres
-    container_name: pgadmin
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
+    networks:
+      - postgres
     ports:
-      - '8080:80'
+      - "8080:80"
     env_file:
       - .env
-    depends_on:
-      - postgres
-    networks:
-      - backend_network
-
-  api:
-    container_name: api
+ 
+  nestjs-api:
     build:
-      dockerfile: Dockerfile
       context: .
+    env_file:
+      - .env
     ports:
-      - 8000:3001
+      - "3000:3000"
     volumes:
-      - .:/app
-    restart: unless-stopped
+      - .:/user/src/app
+      - /user/src/app/node_modules
     depends_on:
       - postgres
     networks:
-      - backend_network
-
+      - postgres
+ 
 networks:
-  backend_network:
+  postgres:
     driver: bridge

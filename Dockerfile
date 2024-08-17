@@ -1,13 +1,13 @@
-FROM node:22-alpine3.19
+FROM node:22-alpine
 
-WORKDIR /app
+WORKDIR /user/src/app
 
 COPY package*.json ./
 
-RUN npm install
+RUN yarn install --omit=dev
 
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
-ENTRYPOINT ["/bin/sh","-c", "npm run start:dev"]
+CMD ["npm","run", "start:dev"]
