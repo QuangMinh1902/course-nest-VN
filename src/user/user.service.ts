@@ -1,10 +1,9 @@
-import { Injectable, Patch } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import UserEntity from './user.entity';
 import { UserNotFoundException } from './user.exception';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -34,15 +33,10 @@ export class UserService {
   }
 
   // Create a new user
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-    // Tạo một instance của UserEntity từ DTO
-    const user = this.userRepository.create(createUserDto);
-
-    // Băm mật khẩu trước khi lưu
-    user.password = await bcrypt.hash(user.password, 10);
-
-    // Lưu user vào database
-    return this.userRepository.save(user);
+  async createUser(userData: CreateUserDto): Promise<UserEntity> {
+    const newUser = await this.userRepository.create(userData);
+    await this.userRepository.save(newUser);
+    return newUser;
   }
 
   async getUserById(id: number): Promise<UserEntity> {
@@ -60,5 +54,13 @@ export class UserService {
       return updatedUser;
     }
     throw new UserNotFoundException(id);
+  }
+
+  async deleteUser(id: number) {
+    const deleteResponse = await this.userRepository.delete(id);
+    if (!deleteResponse.affected) {
+      throw new UserNotFoundException(id);
+    }
+    return 'Delete is successfully.';
   }
 }

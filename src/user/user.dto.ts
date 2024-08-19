@@ -5,10 +5,10 @@ import { UserRole } from './user.model';
 export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
-  name: string;
+  name: string = 'minh';
 
   @IsEmail()
-  email: string;
+  email: string = 'minh@gmail.com';
 
   @IsNotEmpty()
   @IsString()
