@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import UserEntity from './user.entity';
-import { UserNotFoundException } from './user.exception';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import {
   paginate,
   Pagination,
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
+import NotFoundException from 'src/exceptions/not-found.exception';
 
 @Injectable()
 export class UserService {
@@ -54,7 +54,7 @@ export class UserService {
     if (user) {
       return user;
     }
-    throw new UserNotFoundException(email);
+    throw new NotFoundException('User', email);
   }
 
   // Create a new user
@@ -69,7 +69,7 @@ export class UserService {
     if (user) {
       return user;
     }
-    throw new UserNotFoundException(id);
+    throw new NotFoundException('User', id);
   }
 
   async updateUser(id: number, userData: UpdateUserDto) {
@@ -78,13 +78,13 @@ export class UserService {
     if (updatedUser) {
       return updatedUser;
     }
-    throw new UserNotFoundException(id);
+    throw new NotFoundException('User', id);
   }
 
   async deleteUser(id: number) {
     const deleteResponse = await this.userRepository.delete(id);
     if (!deleteResponse.affected) {
-      throw new UserNotFoundException(id);
+      throw new NotFoundException('User', id);
     }
     return 'Delete is successfully.';
   }

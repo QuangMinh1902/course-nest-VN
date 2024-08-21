@@ -29,7 +29,7 @@ export class UserController {
     @Query('page') page: number = 4,
     @Query('keyword') keyword: string,
   ): Promise<Pagination<UserEntity>> {
-    return await this.userService.paginate({ limit, page }, keyword);
+    return this.userService.paginate({ limit, page }, keyword);
   }
 
   @Get()
