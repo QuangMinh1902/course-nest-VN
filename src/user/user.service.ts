@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import UserEntity from './user.entity';
 import { UserNotFoundException } from './user.exception';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
+import {
+  paginate,
+  Pagination,
+  IPaginationOptions,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class UserService {
@@ -11,6 +16,26 @@ export class UserService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
   ) {}
+
+  // Get all users with paginate
+  async paginate(
+    options: IPaginationOptions,
+    keyword: string,
+  ): Promise<Pagination<UserEntity>> {
+    let whereStm = [];
+    if (keyword !== 'admin') {
+      whereStm = [
+        { name: ILike('%' + keyword + '%') },
+        { email: ILike('%' + keyword + '%') },
+      ];
+    }
+    return paginate<UserEntity>(this.userRepository, options, {
+      where: whereStm,
+      order: {
+        id: 'ASC',
+      },
+    });
+  }
 
   // Get All users
   async getUsers(): Promise<UserEntity[]> {

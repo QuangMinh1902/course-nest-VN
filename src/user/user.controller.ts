@@ -6,17 +6,31 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import UserEntity from './user.entity';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('users')
 @ApiTags('Users')
 export class UserController {
   constructor(private userService: UserService) {}
+
+  @Get('/users/paginate')
+  @ApiQuery({ name: 'limit', type: Number, required: false })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  @ApiQuery({ name: 'keyword', type: String, required: false })
+  async getUsersWithPaginate(
+    @Query('limit') limit: number = 1,
+    @Query('page') page: number = 4,
+    @Query('keyword') keyword: string,
+  ): Promise<Pagination<UserEntity>> {
+    return await this.userService.paginate({ limit, page }, keyword);
+  }
 
   @Get()
   async getAllUsers() {
