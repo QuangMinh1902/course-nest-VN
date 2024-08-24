@@ -15,7 +15,7 @@ async function bootstrap() {
       exceptionFactory(errors: ValidationError[]) {
         const result = errors.reduce((accumulated, error) => {
           if (error.constraints) {
-            console.log(error);
+            // console.log(error);
             accumulated.push(Object.values(error.constraints)[0]);
           }
           return accumulated;

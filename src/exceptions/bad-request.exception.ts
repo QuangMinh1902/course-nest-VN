@@ -8,9 +8,11 @@ export default class BadRequestException extends HttpException {
     super(
       {
         message:
-          'The request could not be understood by the server due to malformed syntax.',
+          'Please check your input and retry. If the error persists, please contact us.',
         errors: errors.map((error) => {
-          msgError: error;
+          return {
+            msgError: error,
+          };
         }),
         statusCode: HttpStatus.BAD_REQUEST,
       },

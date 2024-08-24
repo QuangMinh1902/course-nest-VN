@@ -7,7 +7,7 @@ export default class NotFoundException extends HttpException {
         message: 'The resource you requested could not be found',
         errors: [
           {
-            msgErrors: `${resourceName} with ${identifier} not found`,
+            msgErrors: `${resourceName} with id ${identifier} not found`,
           },
         ],
         status: HttpStatus.NOT_FOUND,
