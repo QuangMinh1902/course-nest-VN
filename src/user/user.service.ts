@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import UserEntity from './user.entity';
@@ -64,7 +64,7 @@ export class UserService {
     return newUser;
   }
 
-  async getUserById(id: number): Promise<UserEntity> {
+  async getUserById(@Param('id') id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOneBy({ id: id.toString() });
     if (user) {
       return user;
