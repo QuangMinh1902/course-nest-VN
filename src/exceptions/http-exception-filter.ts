@@ -16,7 +16,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     console.log('exception :', exception.getResponse());
 
     const jsonRes = {
-      data: [],
+      data: {},
       ...(exception.getResponse() as object),
     };
 

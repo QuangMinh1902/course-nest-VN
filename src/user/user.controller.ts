@@ -20,17 +20,17 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('/users/paginate')
-  @ApiQuery({ name: 'limit', type: Number, required: false })
-  @ApiQuery({ name: 'page', type: Number, required: false })
-  @ApiQuery({ name: 'keyword', type: String, required: false })
-  async getUsersWithPaginate(
-    @Query('limit') limit: number = 1,
-    @Query('page') page: number = 4,
-    @Query('keyword') keyword: string,
-  ): Promise<Pagination<UserEntity>> {
-    return this.userService.paginate({ limit, page }, keyword);
-  }
+  // @Get('/users/paginate')
+  // @ApiQuery({ name: 'limit', type: Number, required: false })
+  // @ApiQuery({ name: 'page', type: Number, required: false })
+  // @ApiQuery({ name: 'keyword', type: String, required: false })
+  // async getUsersWithPaginate(
+  //   @Query('limit') limit: number = 1,
+  //   @Query('page') page: number = 4,
+  //   @Query('keyword') keyword: string,
+  // ): Promise<Pagination<UserEntity>> {
+  //   return this.userService.paginate({ limit, page }, keyword);
+  // }
 
   @Get()
   async getAllUsers() {
@@ -38,9 +38,9 @@ export class UserController {
   }
 
   @Post('/create')
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(@Body() createUserDto: CreateUserDto) {
     console.log(createUserDto);
-    return this.userService.createUser(createUserDto);
+    return { user: this.userService.createUser(createUserDto) };
   }
 
   @Get('/validate-password')

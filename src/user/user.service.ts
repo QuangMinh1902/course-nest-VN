@@ -2,12 +2,8 @@ import { Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import UserEntity from './user.entity';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
-import {
-  paginate,
-  Pagination,
-  IPaginationOptions,
-} from 'nestjs-typeorm-paginate';
+import { CreateUserDto, FilterUserDto, UpdateUserDto } from './user.dto';
+import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import NotFoundException from 'src/exceptions/not-found.exception';
 
 @Injectable()
@@ -19,16 +15,21 @@ export class UserService {
 
   // Get all users with paginate
   async paginate(
-    options: IPaginationOptions,
-    keyword: string,
+    filterUserDto: FilterUserDto,
   ): Promise<Pagination<UserEntity>> {
     let whereStm = [];
-    if (keyword !== 'admin') {
+    if (filterUserDto.keyword) {
       whereStm = [
-        { name: ILike('%' + keyword + '%') },
-        { email: ILike('%' + keyword + '%') },
+        // { name: ILike('%' + filterUserDto.keyword + '%') },
+        { email: ILike('%' + filterUserDto.keyword + '%') },
       ];
     }
+
+    const options = {
+      limit: filterUserDto.limit,
+      page: filterUserDto.page,
+    };
+
     return paginate<UserEntity>(this.userRepository, options, {
       where: whereStm,
       order: {
@@ -58,10 +59,10 @@ export class UserService {
   }
 
   // Create a new user
-  async createUser(userData: CreateUserDto): Promise<UserEntity> {
+  async createUser(userData: CreateUserDto): Promise<{ user: UserEntity }> {
     const newUser = await this.userRepository.create(userData);
     await this.userRepository.save(newUser);
-    return newUser;
+    return { user: newUser };
   }
 
   async getUserById(@Param('id') id: number): Promise<UserEntity> {

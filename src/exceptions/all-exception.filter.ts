@@ -22,7 +22,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       response.status(exception.getStatus()).json(jsonRes);
     } else {
       const responseBody = {
-        data: [],
+        data: {},
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'An error occur, please try again',
         errors: [
