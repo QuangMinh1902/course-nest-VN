@@ -15,8 +15,8 @@ export class SerializeInter implements NestInterceptor {
       map((res: any) => {
         return {
           statusCode: HttpStatus.OK,
-          data: res,
-          message: 'test',
+          data: typeof res == 'string' ? {} : res,
+          message: typeof res == 'string' ? res : '',
           errors: [],
         };
       }),
