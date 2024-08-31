@@ -13,6 +13,7 @@ export class SerializeInter implements NestInterceptor {
     const observable = next.handle();
     return observable.pipe(
       map((res: any) => {
+        console.log(res);
         return {
           statusCode: HttpStatus.OK,
           data: typeof res == 'string' ? {} : res,

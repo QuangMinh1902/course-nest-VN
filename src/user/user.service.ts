@@ -59,10 +59,10 @@ export class UserService {
   }
 
   // Create a new user
-  async createUser(userData: CreateUserDto): Promise<{ user: UserEntity }> {
-    const newUser = await this.userRepository.create(userData);
-    await this.userRepository.save(newUser);
-    return { user: newUser };
+  async createUser(userData: CreateUserDto): Promise<UserEntity> {
+    const newUser = this.userRepository.create(userData);
+    const user = await this.userRepository.save(newUser);
+    return user;
   }
 
   async getUserById(@Param('id') id: number): Promise<UserEntity> {
