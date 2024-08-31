@@ -4,7 +4,7 @@ import { ILike, Repository } from 'typeorm';
 import UserEntity from './user.entity';
 import { CreateUserDto, FilterUserDto, UpdateUserDto } from './user.dto';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
-import NotFoundException from 'src/exceptions/not-found.exception';
+import NotFoundException from 'src/commons/exceptions/not-found.exception';
 
 @Injectable()
 export class UserService {
@@ -41,10 +41,10 @@ export class UserService {
   // Get All users
   async getUsers(): Promise<UserEntity[]> {
     return this.userRepository.find({
-      select: {
-        name: true,
-        email: true,
-      },
+      // select: {
+      //   name: true,
+      //   email: true,
+      // },
       where: {},
     });
   }

@@ -1,11 +1,13 @@
 import {
   Body,
+  // ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Param,
   Patch,
   Post,
+  // UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, FilterUserDto, UpdateUserDto } from './user.dto';
@@ -28,13 +30,15 @@ export class UserController {
   }
 
   @Get()
+  // @UseInterceptors(ClassSerializerInterceptor)
   async getAllUsers() {
-    return await this.userService.getUsers();
+    const users = await this.userService.getUsers();
+    return { users };
   }
 
   @Post('/create')
   async createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
+    // console.log(createUserDto);
     const user = await this.userService.createUser(createUserDto);
     return { user };
   }

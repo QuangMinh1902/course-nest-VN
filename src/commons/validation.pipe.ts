@@ -1,5 +1,5 @@
 import { ValidationError, ValidationPipe } from '@nestjs/common';
-import BadRequestException from 'src/exceptions/bad-request.exception';
+import BadRequestException from './exceptions/bad-request.exception';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const customValidationPipe = () => {

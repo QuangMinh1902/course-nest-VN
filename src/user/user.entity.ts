@@ -24,13 +24,14 @@ export default class UserEntity {
   email: string;
 
   @Column()
-  @Exclude()
   password: string;
 
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
 
   @DeleteDateColumn()
