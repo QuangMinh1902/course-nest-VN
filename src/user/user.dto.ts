@@ -22,6 +22,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class FilterUserDto {
   page: number = 4;
-  limit: number = 1;
+  limit: number;
   keyword: string;
 }

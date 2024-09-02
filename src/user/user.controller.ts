@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   // UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -24,7 +25,7 @@ export class UserController {
   @Get('/users/paginate')
   @ApiQuery({ name: 'keyword', type: String, required: false })
   async getUsersWithPaginate(
-    filterUser: FilterUserDto,
+    @Query() filterUser: FilterUserDto,
   ): Promise<Pagination<UserEntity>> {
     return this.userService.paginate(filterUser);
   }
@@ -65,5 +66,10 @@ export class UserController {
   @Delete(':id')
   async deleteUser(@Param('id') id: number) {
     return this.userService.deleteUser(id);
+  }
+
+  @Patch('restore-user/:id')
+  async restoreUser(@Param('id') id: number) {
+    return this.userService.restoreSoftDelete(id);
   }
 }

@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user.model';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 
 @Entity('users')
 export default class UserEntity {
@@ -18,6 +18,7 @@ export default class UserEntity {
   role: UserRole;
 
   @Column()
+  @Transform(({ value }) => (value == 'test' ? 'minh' : value))
   name: string;
 
   @Column({ unique: true })
@@ -37,4 +38,9 @@ export default class UserEntity {
   @DeleteDateColumn()
   @Exclude()
   deletedAt: Date;
+
+  @Expose()
+  get fullName(): string {
+    return `${this.name}`;
+  }
 }

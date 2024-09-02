@@ -14,12 +14,14 @@ import { AllExceptionsFilter } from './commons/exceptions/all-exception.filter';
 import envConfig from './commons/config/env.config';
 import { LoggerMiddleware } from './commons/middleware/logger.middleware';
 import { UserController } from './user/user.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [envConfig] }),
     DatabaseModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [

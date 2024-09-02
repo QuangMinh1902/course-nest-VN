@@ -83,10 +83,18 @@ export class UserService {
   }
 
   async deleteUser(id: number) {
-    const deleteResponse = await this.userRepository.delete(id);
+    const deleteResponse = await this.userRepository.softDelete(id);
     if (!deleteResponse.affected) {
       throw new NotFoundException('User', id);
     }
     return 'Delete is successfully.';
+  }
+
+  async restoreSoftDelete(id: number) {
+    const result = await this.userRepository.restore(id);
+    if (!result) {
+      throw new NotFoundException('User', id);
+    }
+    return 'Restore is successfully.';
   }
 }
