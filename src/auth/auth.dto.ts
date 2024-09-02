@@ -7,3 +7,9 @@ export class SignInDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class ForgotPasswordAuthDto {
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+}

@@ -15,6 +15,7 @@ import envConfig from './commons/config/env.config';
 import { LoggerMiddleware } from './commons/middleware/logger.middleware';
 import { UserController } from './user/user.controller';
 import { AuthModule } from './auth/auth.module';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthModule } from './auth/auth.module';
     DatabaseModule,
     AuthModule,
     UserModule,
+    MailerModule,
   ],
   controllers: [],
   providers: [

@@ -22,6 +22,16 @@ export const configSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle(swaggerConfig.title)
     .setDescription(swaggerConfig.desc)
+    .addBearerAuth(
+      {
+        description: 'Please enter token in following format: Bearer',
+        name: 'Authorization',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header',
+      },
+      'access-token',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

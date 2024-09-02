@@ -27,6 +27,10 @@ export default class UserEntity {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  @Exclude()
+  tokenResetPass: string;
+
   @CreateDateColumn()
   @Exclude()
   createdAt: Date;
