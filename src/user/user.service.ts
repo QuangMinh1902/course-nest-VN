@@ -97,4 +97,12 @@ export class UserService {
     }
     return 'Restore is successfully.';
   }
+
+  async getUserByToken(token: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOneBy({ tokenResetPass: token });
+    if (user) {
+      return user;
+    }
+    throw new NotFoundException('User', token);
+  }
 }

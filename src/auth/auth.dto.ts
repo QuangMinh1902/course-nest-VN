@@ -13,3 +13,11 @@ export class ForgotPasswordAuthDto {
   @IsEmail()
   email: string;
 }
+
+export class ResetPasswordAuthDto {
+  @IsNotEmpty()
+  token: string;
+
+  @IsNotEmpty()
+  password: string;
+}

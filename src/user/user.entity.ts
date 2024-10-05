@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user.model';
 import { Exclude, Expose, Transform } from 'class-transformer';
+import TokenEntity from 'src/token/token.entity';
 
 @Entity('users')
 export default class UserEntity {
@@ -47,4 +49,7 @@ export default class UserEntity {
   get fullName(): string {
     return `${this.name}`;
   }
+
+  @OneToMany(() => TokenEntity, (token: TokenEntity) => token.author)
+  public tokens: TokenEntity[];
 }

@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { SignInDto } from './auth.dto';
+import { ResetPasswordAuthDto, SignInDto } from './auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
 import * as crypto from 'crypto';
+
+import * as bcrypt from 'bcrypt';
+import { TokenService } from 'src/token/token.service';
 
 @Injectable()
 export class AuthService {
@@ -11,14 +14,17 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JwtService,
     private mailerService: MailerService,
+    private tokenService: TokenService,
   ) {}
 
   async signIn(signIn: SignInDto) {
     const user = await this.usersService.getUserByEmail(signIn.email);
     const payload = { id: user.id };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const accessToken = await this.jwtService.signAsync(payload);
+    return this.tokenService.createToken({
+      accessToken,
+      author: user,
+    });
   }
 
   async forgotPassword(email: string) {
@@ -36,5 +42,12 @@ export class AuthService {
       html: html,
     });
     return updatedUser;
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordAuthDto) {
+    const user = await this.usersService.getUserByToken(resetPasswordDto.token);
+    user.tokenResetPass = '';
+    user.password = await bcrypt.hash(resetPasswordDto.password, 10);
+    return await this.usersService.updateUser(+user.id, user);
   }
 }
