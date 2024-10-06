@@ -50,4 +50,8 @@ export class AuthService {
     user.password = await bcrypt.hash(resetPasswordDto.password, 10);
     return await this.usersService.updateUser(+user.id, user);
   }
+
+  async singout(accessToken: string) {
+    return await this.tokenService.deleteToken(accessToken);
+  }
 }

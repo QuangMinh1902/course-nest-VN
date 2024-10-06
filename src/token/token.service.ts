@@ -25,4 +25,26 @@ export class TokenService {
     }
     return 'Delete token successfully';
   }
+
+  async checkOwnerAccessToken(
+    userId: number,
+    accessToken: string,
+  ): Promise<TokenEntity> {
+    const token = await this.tokenRepository.findOne({
+      where: {
+        accessToken: accessToken,
+        author: {
+          id: userId.toString(),
+        },
+      },
+      relations: ['author'],
+    });
+
+    console.log({ token });
+
+    if (token) {
+      return token;
+    }
+    throw new NotFoundException('Token', accessToken);
+  }
 }

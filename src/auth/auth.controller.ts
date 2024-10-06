@@ -28,7 +28,7 @@ export class AuthController {
   @Get('/me')
   @UseGuards(AuthGuard)
   async getMe(@Req() req) {
-    const payload = req.currentUser;
+    const payload = req.currentPayloadUser;
     return {
       user: await this.userService.getUserById(payload.id),
     };
