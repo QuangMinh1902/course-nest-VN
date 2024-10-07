@@ -47,6 +47,6 @@ export class AuthController {
   @Get('/signout')
   @UseGuards(AuthGuard)
   async signOut(@Req() req) {
-    return await this.tokenService.deleteToken(req.accessToken);
+    return await this.authService.singout(req.accessToken);
   }
 }

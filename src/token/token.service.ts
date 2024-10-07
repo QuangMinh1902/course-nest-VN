@@ -21,7 +21,7 @@ export class TokenService {
   async deleteToken(accessToken: string) {
     const deleteResponse = await this.tokenRepository.delete({ accessToken });
     if (!deleteResponse.affected) {
-      throw new NotFoundException('Token not found', accessToken);
+      throw new NotFoundException('Token', accessToken);
     }
     return 'Delete token successfully';
   }
