@@ -1,6 +1,8 @@
 import { PartialType } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { UserRole } from './user.model';
+import { Type } from 'class-transformer';
+import { CreateAddressDto } from 'src/address/address.dto';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -16,6 +18,10 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   role: UserRole;
+
+  @ValidateNested()
+  @Type(() => CreateAddressDto)
+  address: CreateAddressDto;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

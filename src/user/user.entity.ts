@@ -3,13 +3,16 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user.model';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import TokenEntity from 'src/token/token.entity';
+import AddressEntity from 'src/address/address.entity';
 
 @Entity('users')
 export default class UserEntity {
@@ -52,4 +55,8 @@ export default class UserEntity {
 
   @OneToMany(() => TokenEntity, (token: TokenEntity) => token.author)
   public tokens: TokenEntity[];
+
+  @OneToOne(() => AddressEntity, (address: AddressEntity) => address.user)
+  @JoinColumn()
+  address: AddressEntity;
 }

@@ -8,7 +8,6 @@ import {
 } from './auth.dto';
 import { AuthGuard } from './auth.guard';
 import { UserService } from 'src/user/user.service';
-import { TokenService } from 'src/token/token.service';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -17,7 +16,6 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private tokenService: TokenService,
   ) {}
 
   @Post('')

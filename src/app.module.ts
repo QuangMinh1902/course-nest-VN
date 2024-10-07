@@ -16,6 +16,7 @@ import { LoggerMiddleware } from './commons/middleware/logger.middleware';
 import { UserController } from './user/user.controller';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { TokenModule } from './token/token.module';
     AuthModule,
     UserModule,
     TokenModule,
+    AddressModule,
   ],
   controllers: [],
   providers: [

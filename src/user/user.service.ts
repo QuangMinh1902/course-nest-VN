@@ -5,12 +5,14 @@ import UserEntity from './user.entity';
 import { CreateUserDto, FilterUserDto, UpdateUserDto } from './user.dto';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import NotFoundException from 'src/commons/exceptions/not-found.exception';
+import { AddressService } from 'src/address/address.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private addressService: AddressService,
   ) {}
 
   // Get all users with paginate
@@ -46,6 +48,7 @@ export class UserService {
       //   email: true,
       // },
       where: {},
+      relations: ['address'],
     });
   }
 
@@ -60,13 +63,24 @@ export class UserService {
 
   // Create a new user
   async createUser(userData: CreateUserDto): Promise<UserEntity> {
+    let address = null;
+    if (userData.address) {
+      address = await this.addressService.createAddress(userData.address);
+    }
+
     const newUser = this.userRepository.create(userData);
+    if (address) {
+      newUser.address = address;
+    }
     const user = await this.userRepository.save(newUser);
     return user;
   }
 
   async getUserById(@Param('id') id: number): Promise<UserEntity> {
-    const user = await this.userRepository.findOneBy({ id: id.toString() });
+    const user = await this.userRepository.findOne({
+      where: { id: id.toString() },
+      relations: ['address'],
+    });
     if (user) {
       return user;
     }
