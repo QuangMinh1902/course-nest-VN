@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     container_name: database
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT_DOCKER}
+      - ${POSTGRES_PORT}:${DATABASE_PORT_CONTAINER}
     networks:
       - nestAPI
     env_file:

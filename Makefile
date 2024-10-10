@@ -4,7 +4,7 @@ database= postgres
 docker run:
 	docker compose up
 
-docker rebuild: 
+docker rebuild api: 
 	docker compose up --build ${nestjs}
 
 stop app:
