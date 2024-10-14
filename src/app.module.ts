@@ -18,6 +18,8 @@ import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { AddressModule } from './address/address.module';
 import { MediaModule } from './media/media.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -28,6 +30,9 @@ import { MediaModule } from './media/media.module';
     TokenModule,
     AddressModule,
     MediaModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
   ],
   controllers: [],
   providers: [
